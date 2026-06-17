@@ -1,0 +1,21 @@
+
+docker exec -it postgres psql -U appuser -d phishingdb
+\dt 
+
+
+
+docker compose down
+docker compose up --build
+
+
+
+docker exec -it gateway python 
+then 
+from app.core.security import hash_password
+print(hash_password("admin123"))
+
+then copy theoutput then insert into sql table 
+
+
+
+

@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: Phishing Simulation Platform API
+  version: 1.0.0
+  description: Internal service contracts for the Gen-AI phishing simulator
+
+paths:
+
+  /generate-phish:
+    post:
+      summary: Generate a simulated phishing email
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhishRequest'
+      responses:
+        '200':
+          description: Phishing email generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PhishResponse'
+
+  /evaluate-risk:
+    post:
+      summary: Evaluate user interaction and adapt campaign difficulty
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RiskRequest'
+      responses:
+        '200':
+          description: Risk evaluated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskResponse'
+
+components:
+  schemas:
+
+    PhishRequest:
+      type: object
+      required: [style_profile, difficulty, theme]
+      properties:
+        style_profile:
+          type: object
+          description: Extracted email style metadata
+        difficulty:
+          type: string
+          enum: [easy, medium, hard, expert]
+        theme:
+          type: string
+
+    PhishResponse:
+      type: object
+      required: [subject, body, attack_metadata]
+      properties:
+        subject:
+          type: string
+        body:
+          type: string
+        attack_metadata:
+          type: object
+
+    RiskRequest:
+      type: object
+      required: [user_id, email_id, action]
+      properties:
+        user_id:
+          type: integer
+        email_id:
+          type: integer
+        action:
+          type: string
+          enum: [clicked, reported, ignored]
+
+    RiskResponse:
+      type: object
+      required: [risk_score, next_difficulty, next_theme]
+      properties:
+        risk_score:
+          type: integer
+        next_difficulty:
+          type: string
+          enum: [easy, medium, hard, expert]
+        next_theme:
+          type: string
+
